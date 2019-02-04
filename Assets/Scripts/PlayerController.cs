@@ -10,7 +10,7 @@ public class PlayerController : MonoBehaviour
     public Text scoreText;
     public Text winText;
     private Rigidbody rb;
-    private int count = 0, score = 0, count2 = 0, score2 = 0;
+    private int count = 0, score = 0, lives = 3;
 
     void Start()
     {
@@ -23,11 +23,7 @@ public class PlayerController : MonoBehaviour
     void Update()
     {
         if (Input.GetKey("escape"))
-            Application.Quit();
-        if (count >= 16 && score > 13)
-        {
-            transform.position = new Vector3(-70.0f, 0.5f,0.0f); 
-        }
+            Application.Quit();        
     }
 
     void FixedUpdate()
@@ -36,7 +32,7 @@ public class PlayerController : MonoBehaviour
         float moveVertical = Input.GetAxis("Vertical");
         Vector3 movement = new Vector3(moveHorizontal, 0.0f, moveVertical);
         rb.AddForce(movement * speed);
-    }
+    }   
 
     private void OnTriggerEnter(Collider other)
     {
@@ -52,20 +48,22 @@ public class PlayerController : MonoBehaviour
             other.gameObject.SetActive(false);
             count++;
             score--;
+            lives--;
             SetAllText();
         }
         else if (other.gameObject.CompareTag("Pick Up2"))
         {
             other.gameObject.SetActive(false);
-            count2++;
-            score2++;
+            count++;
+            score++;
             SetAllText();
         }
         else if (other.gameObject.CompareTag("Enemy2"))
         {
             other.gameObject.SetActive(false);
-            count2++;
-            score2--;
+            count++;
+            score--;
+            lives--;
             SetAllText();
         }
     }
@@ -74,18 +72,31 @@ public class PlayerController : MonoBehaviour
     {
         countText.text = "Count: " + count.ToString();
         scoreText.text = "Score: " + score.ToString();
-        if (count >= 16 && score > 13)
+        if (lives == 0 && gameObject.CompareTag("Player"))
+        {
+            gameObject.SetActive(false);
+        }
+        else if (count >= 16)
         {
             winText.text = "You Win";
         }
-    }
+        if (count >= 16 && score > 13)
+        {
+            count = 0;
+            lives = 3;                       
+            transform.position = new Vector3(-70.0f, 0.5f, 0.0f);
+            winText.text = "";
+        }
+
+    }   
 
     void SetAllText2 ()
-    {
-        winText.text = "";
-        countText.text = "Count: " + count2.ToString();
-        scoreText.text = "Score: " + score2.ToString();
-        if (count2 >= 12 && score2 > 9)
+    {             
+        if (lives == 0 && gameObject.CompareTag("Player"))
+        {
+            gameObject.SetActive(false);
+        }
+        else if (count >= 12)
         {
             winText.text = "You Win";
         }
