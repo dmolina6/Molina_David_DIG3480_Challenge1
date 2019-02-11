@@ -57,6 +57,7 @@ public class PlayerController : MonoBehaviour
             count++;
             score++;
             SetAllText();
+            SetAllText2();
         }
         else if (other.gameObject.CompareTag("Enemy2"))
         {
@@ -65,6 +66,7 @@ public class PlayerController : MonoBehaviour
             score--;
             lives--;
             SetAllText();
+            SetAllText2();
         }
     }
 
